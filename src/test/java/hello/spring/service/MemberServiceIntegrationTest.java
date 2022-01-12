@@ -2,7 +2,6 @@ package hello.spring.service;
 
 import hello.spring.domain.Member;
 import hello.spring.repository.MemberRepository;
-import hello.spring.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +14,10 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 @Transactional
 class MemberServiceIntegrationTest {
 
-    @Autowired MemberService memberService;
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberService memberService;
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     void join() {
@@ -47,5 +48,14 @@ class MemberServiceIntegrationTest {
         //then
         assertThatIllegalArgumentException().isThrownBy(() -> memberService.join(member2))
                 .withMessage("이미 존재하는 회원입니다.");
+    }
+
+    @Test
+    void findOne() {
+        //when
+        Member member = memberService.findOne(1L).get();
+
+        //then
+        assertThat(member.getName()).isEqualTo("JPA");
     }
 }
